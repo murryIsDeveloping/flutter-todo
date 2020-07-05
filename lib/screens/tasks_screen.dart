@@ -42,7 +42,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
                   )),
-              child: TodoeyList(tasks, update),
+              child: TodoeyList(tasks, removeItem, update),
             ),
           )
         ],
@@ -68,7 +68,14 @@ class _TaskScreenState extends State<TaskScreen> {
     });
   }
 
-  update(){
-    setState(() {});
+  update() {
+    setState(() { });
+  }
+
+  removeItem(Task task) {
+    setState(() {
+      tasks = tasks.where((el) => el != task).toList();
+      Navigator.pop(context);
+    });
   }
 }

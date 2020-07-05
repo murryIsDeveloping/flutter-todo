@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/models/tasks.dart';
+import 'package:todoapp/screens/confirm_delete_screen.dart';
 
 class ItemCheckbox extends StatelessWidget {
   final bool checked;
@@ -19,9 +20,10 @@ class ItemCheckbox extends StatelessWidget {
 
 class TodoeyItem extends StatelessWidget {
   final Task task;
+  final Function remove;
   final Function update;
 
-  TodoeyItem(this.task, this.update);
+  TodoeyItem(this.task, this.remove, this.update);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,12 @@ class TodoeyItem extends StatelessWidget {
           task.toggle();
           update();
         }),
+      onLongPress: () => {
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) => ConfirmDeleteScreen(remove, task),
+        ),
+      },
     );
   }
 }
@@ -41,15 +49,16 @@ class TodoeyItem extends StatelessWidget {
 class TodoeyList extends StatelessWidget {
   final Function update;
   final List<Task> tasks;
+  final Function remove;
 
-  TodoeyList(this.tasks, this.update);
+  TodoeyList(this.tasks, this.remove, this.update);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
-        return TodoeyItem(tasks[index], update);
+        return TodoeyItem(tasks[index], remove, update);
       },
       itemCount:  tasks.length,
     );
